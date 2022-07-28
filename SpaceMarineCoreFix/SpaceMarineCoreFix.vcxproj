@@ -71,12 +71,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <TargetName>d3d9</TargetName>
+    <TargetName>DINPUT8</TargetName>
     <IncludePath>$(SolutionDir)\External\Detours\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\External\Detours\lib.X86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>d3d9</TargetName>
+    <TargetName>DINPUT8</TargetName>
     <IncludePath>$(SolutionDir)\External\Detours\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\External\Detours\lib.X86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>

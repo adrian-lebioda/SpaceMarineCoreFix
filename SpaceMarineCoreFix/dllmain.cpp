@@ -82,10 +82,10 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 	return TRUE;
 }
 
-// Export function to impersonate Direct3D9 library
+// Export function to impersonate DirectInput8 library
 // Original library paths, it will break in case of non standard windows install
-#define ORIGINAL_DLL_PATH_64BIT_SYSTEM "C:\\Windows\\SysWOW64\\d3d9.dll"
-#define ORIGINAL_DLL_PATH_32BIT_SYSTEM "C:\\Windows\\d3d9.dll"
+#define ORIGINAL_DLL_PATH_64BIT_SYSTEM "C:\\Windows\\SysWOW64\\DINPUT8.dll"
+#define ORIGINAL_DLL_PATH_32BIT_SYSTEM "C:\\Windows\\DINPUT8.dll"
 
 static BOOL Is64BitOS()
 {
@@ -107,11 +107,17 @@ static BOOL Is64BitOS()
 
 static const BOOL IS_64BIT_OS = Is64BitOS();
 
-using Direct3DCreate9FunctionType = void* (WINAPI*)(UINT);
+#include "Unknwn.h"
 
-extern "C" void* WINAPI Direct3DCreate9(UINT SDKVersion)
+using DirectInput8CreateFunctionType = HRESULT(WINAPI*)(HINSTANCE, DWORD, REFIID, LPVOID*, LPUNKNOWN);
+
+extern "C" HRESULT WINAPI DirectInput8Create(HINSTANCE hinst,
+	DWORD dwVersion,
+	REFIID riidltf,
+	LPVOID * ppvOut,
+	LPUNKNOWN punkOuter)
 {
-	// Load original d3d9.dll and then call Direct3DCreate9 from it
+	// Load original DINPUT8.dll and then call DirectInput8Create from it
 	static HMODULE moduleHandle = LoadLibrary(
 		IS_64BIT_OS ? TEXT(ORIGINAL_DLL_PATH_64BIT_SYSTEM) : TEXT(ORIGINAL_DLL_PATH_32BIT_SYSTEM)
 	);
@@ -121,16 +127,16 @@ extern "C" void* WINAPI Direct3DCreate9(UINT SDKVersion)
 		if (moduleHandle == NULL)
 		{
 			RaiseException(EXCEPTION_INVALID_HANDLE, EXCEPTION_NONCONTINUABLE, 0, NULL);
-			return nullptr;
+			return E_INVALIDARG;
 		}
 	}
 
-	const auto direct3DCreate9 = reinterpret_cast<Direct3DCreate9FunctionType>(RealGetProcAddress(moduleHandle, "Direct3DCreate9"));
-	if (direct3DCreate9 == NULL)
+	const auto directInput8Create = reinterpret_cast<DirectInput8CreateFunctionType>(RealGetProcAddress(moduleHandle, "DirectInput8Create"));
+	if (directInput8Create == NULL)
 	{
 		RaiseException(EXCEPTION_INVALID_HANDLE, EXCEPTION_NONCONTINUABLE, 0, NULL);
-		return nullptr;
+		return E_INVALIDARG;
 	}
 
-	return direct3DCreate9(SDKVersion);
+	return directInput8Create(hinst, dwVersion, riidltf, ppvOut, punkOuter);
 }

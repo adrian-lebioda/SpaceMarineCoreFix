@@ -2,12 +2,16 @@
 
 Project inspired by similar fix for Dawn of War 2 ([maximumgame/DOW2CoreFix](https://github.com/maximumgame/DOW2CoreFix)).
 
-This one however impersonates Direct3D9 DLL to install detours on Windows API functions for quering number of cores and forwards call to original DLL.
+This one however impersonates DirectInput8 DLL to install detours on Windows API functions for querying number of cores and forwards call to original DLL.
+
+## Download
+
+Download **DINPUT8.dll** from [releases](https://github.com/adrian-lebioda/SpaceMarineCoreFix/releases).
 
 ## Installation
 
 1. Download and install [x86 Visual Studio 2022 Redistributable](https://aka.ms/vs/17/release/vc_redist.x86.exe)
-2. Copy **d3d9.dll** to the install directory of Space Marine (next to **SpaceMarine.exe**)
+2. Copy **DINPUT8.dll** to the install directory of Space Marine (next to **SpaceMarine.exe**)
 3. Launch game
 
 ## Limitations
@@ -18,4 +22,4 @@ This one however impersonates Direct3D9 DLL to install detours on Windows API fu
 
 ## Building
 
-Open SpaceMarineCoreFix.sln in Visual Studio 2022 Community and build Release version. Built DLL should be in Realease folder in root project directory.
+Open SpaceMarineCoreFix.sln in Visual Studio 2022 Community and build Release version. Built DLL should be in Release folder in root project directory.
